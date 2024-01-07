@@ -5,17 +5,19 @@
 #include <string>
 #include "street.h"
 
-class Intersection {
+class Intersection
+{
 public:
-    public:
-    Intersection() : id(0) {}  // Default constructor
-    Intersection(int id, std::vector<Street>& street);
-    void addStreet(const Street& street, int direction);
+    Intersection(): id(0){}; 
+    Intersection(int id, std::vector<Street> streets);
+    void addStreet(const Street &street);
+    void addCarsToStreet(int streetID, const std::vector<Car> &cars);
+    void addPedestriansToStreet(int streetID, const std::vector<Pedestrian> &pedestrians);
     void displayIntersection() const;
 
 private:
     int id;
-    Street streets[4];  // Assuming four streets (north, south, east, west)
+    std::vector<Street> streets; // Assuming four streets (north, south, east, west)
 };
 
 #endif // INTERSECTION_H

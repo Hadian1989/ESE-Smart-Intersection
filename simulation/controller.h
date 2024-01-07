@@ -5,17 +5,19 @@
 #include <cstdlib> // for rand()
 #include "intersection.h"
 #include "car.h"
+#include "street.h"
 #include "pedestrian.h"
 
 class Controller {
 public:
-    Controller();
-
-private:
+    Controller(int id);
     Intersection intersection;
-    void addRandomCars();
-    void addRandomPedestrians();
-    void addRandomEmergencyCar();
+    void addCarToEachStreet(int intersectionId, int streetID, const std::vector<Car> &cars);
+    void addPedestrianToStreet(int intersectionId, int streetID, const std::vector<Pedestrian> &pedestrians);
+    void displayInfo();
+private:
+    
+    
 };
 
 #endif // CENTRALIZED_CONTROLLER_H
