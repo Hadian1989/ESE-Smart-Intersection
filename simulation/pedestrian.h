@@ -4,6 +4,12 @@
 #include <iostream>
 #include <string>
 
+enum Direction {
+    SOUTH,
+    WEST,
+    NORTH,
+    EAST
+};
 class Pedestrian {
 public:
     Pedestrian(int id, Direction intended_direction , bool is_waiting_response);

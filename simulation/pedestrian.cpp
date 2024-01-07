@@ -1,8 +1,7 @@
-#include "street.h"
 #include "pedestrian.h"
 
 
-Pedestrian::Pedestrian(int id, int intended_direction, bool is_waiting_response)
+Pedestrian::Pedestrian(int id, Direction intended_direction, bool is_waiting_response)
     : id(id), intended_direction(intended_direction), is_waiting_response(is_waiting_response) {}
 
 void Pedestrian::displayInfo() const {

@@ -7,12 +7,6 @@
 #include "car.h"
 #include "pedestrian.h"
 
-enum Direction {
-    SOUTH,
-    WEST,
-    NORTH,
-    EAST
-};
 
 class Street {
 public:
