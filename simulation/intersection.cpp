@@ -1,6 +1,6 @@
 #include "intersection.h"
 
-Intersection::Intersection(int id) : id(id) {}
+Intersection::Intersection(int id, std::vector<Street>& street) : id(id) {}
 
 void Intersection::addStreet(const Street& street, int direction) {
     if (direction >= 0 && direction < 4) {

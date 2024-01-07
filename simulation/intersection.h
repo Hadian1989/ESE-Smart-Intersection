@@ -7,7 +7,9 @@
 
 class Intersection {
 public:
-    Intersection(int id);
+    public:
+    Intersection() : id(0) {}  // Default constructor
+    Intersection(int id, std::vector<Street>& street);
     void addStreet(const Street& street, int direction);
     void displayIntersection() const;
 

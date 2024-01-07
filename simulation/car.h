@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+
 enum Navigation {
     NORTH_TO_SOUTH,
     North_To_EAST,
@@ -31,7 +32,7 @@ private:
     int velocity;
     bool is_emergency;
     std::pair<int, int> position; // Assuming a 2D position (x, y)
-    Direction intended_navigation;  // Enum to represent intended direction
+    Navigation intended_navigation;  // Enum to represent intended direction
     double distance;
     bool is_waiting_response;
     bool is_get_permit;
