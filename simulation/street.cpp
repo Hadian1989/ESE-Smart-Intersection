@@ -2,10 +2,10 @@
 #include "pedestrian.h"
 #include "street.h"
 #include <iostream>
+#include <algorithm>  
 
 // Parameterized constructor
-Street::Street(int id, Direction direction, std::vector<Car> cars,
-               std::vector<Pedestrian> pedestrians) : id(id), direction(direction), cars(cars), pedestrians(pedestrians) {}
+Street::Street(int id, Direction direction) : id(id), direction(direction), cars(cars), pedestrians(pedestrians) {}
 
 // Method to add a car to the street
 void Street::addCar(const Car &car)
@@ -70,6 +70,10 @@ const std::vector<Pedestrian> &Street::getPedestrians() const
 {
     return pedestrians;
 }
+const Direction Street::getDirection() const
+{
+    return direction;
+};
 const bool Street::hasPedestrians() const
 {
     return (pedestrians.size() > 0);
@@ -86,3 +90,26 @@ Priority Street::getPriority()
 {
     return priority;
 }
+bool Street::checkEmergency()
+{
+    for (auto &car : cars)
+    {
+        if (car.getIsEmergency())
+        {
+            return true;
+        }
+        break;
+    }
+};
+std::vector<Car> Street::sortAllStreetCarsByDistance(const Street street)
+{
+    std::vector<Car> cars;
+
+    std::vector<Car> streetCars = street.getCars();
+    cars.insert(cars.end(), streetCars.begin(), streetCars.end());
+
+    // Now, sort the combined vector of cars
+    std::sort(cars.begin(), cars.end(), [](const Car &car1, const Car &car2)
+              { return car1.getDistance() < car2.getDistance(); });
+    return cars;
+};

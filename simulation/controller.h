@@ -14,10 +14,11 @@ public:
     void addCarToEachStreet(int intersectionId, int streetID, const std::vector<Car> &cars);
     void addPedestrianToStreet(int intersectionId, int streetID, const std::vector<Pedestrian> &pedestrians);
     void displayInfo();
-    bool calculateTrafficMode();
-    void calculatePriority();
-    void setPermission();
-    void simulation();
+    bool calculateTrafficCongestion();
+    void checkVehiclesCollision();
+    void setStreetPriority();
+    void setCarPermission();
+    void movingSimulation();
 private:
     
     

@@ -26,8 +26,13 @@ public:
         std::pair<int, int> position, Navigation intended_navigation, Direction origin, Direction destination,
         double distance, bool isWaitingResponse, bool isPermitted);
     void displayInfo() const;
-    void setPermission(bool permission) const;
-    const bool isEmergency() const;
+    void setPermission(bool permission);
+    const bool getIsEmergency();
+    const Direction getOrigin();
+    const Direction getDestination();
+    const Navigation getIntendedNavigation();
+    const double getDistance() const;
+    bool compareCarsByDistance(const Car& car1, const Car& car2);
 
 private:
     int id;
