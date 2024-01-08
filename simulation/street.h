@@ -7,6 +7,13 @@
 #include "car.h"
 #include "pedestrian.h"
 
+enum Priority {
+    EMERGENCY,
+    HIGHTRAFFIC,
+    PASSENGER,
+    NORMAL
+};
+
 class Street
 {
 public:
@@ -18,8 +25,20 @@ public:
     void displayTraffic() const;
     bool calculateTraffic();
 
+    const int getId() const;
+    const std::vector<Car> &getCars() const;
+    const std::vector<Pedestrian> &getPedestrians() const;
+    const bool hasPedestrians() const;
+    // Setters for hasPriority
+    void setPriority(Priority priority);
+    Priority getPriority();
+
+
+
 private:
     int id;
+    bool isTrafficHigh;
+    Priority priority;
     Direction direction;
     std::vector<Car> cars;
     std::vector<Pedestrian> pedestrians;

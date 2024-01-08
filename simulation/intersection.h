@@ -14,9 +14,12 @@ public:
     void addCarsToStreet(int streetID, const std::vector<Car> &cars);
     void addPedestriansToStreet(int streetID, const std::vector<Pedestrian> &pedestrians);
     void displayIntersection() const;
+    const std::vector<Street> getStreets() const;
 
 private:
     int id;
+    bool isExtremWeather;
+    bool isFailureOccured;
     std::vector<Street> streets; // Assuming four streets (north, south, east, west)
 };
 

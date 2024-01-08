@@ -1,0 +1,8 @@
+g++ -c pedestrian.cpp -o pedestrian.o
+g++ -c car.cpp -o car.o
+g++ -c street.cpp -o street.o
+g++ -c intersection.cpp -o intersection.o
+g++ -c controller.cpp -o controller.o
+g++ -c main.cpp -o main.o
+g++ car.o pedestrian.o street.o intersection.o controller.o main.o -o myprogram
+./myprogram

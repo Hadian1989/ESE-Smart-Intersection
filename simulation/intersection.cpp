@@ -41,3 +41,7 @@ void Intersection::displayIntersection() const {
         std::cout << std::endl;
     }
 }
+const std::vector<Street> Intersection::getStreets() const
+{
+    return streets;
+}

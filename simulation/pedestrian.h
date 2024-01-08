@@ -12,13 +12,13 @@ enum Direction {
 };
 class Pedestrian {
 public:
-    Pedestrian(int id, Direction intended_direction , bool is_waiting_response);
+    Pedestrian(int id, Direction intended_direction , bool isWaitingResponse);
     void displayInfo() const;
 
 private:
     int id;
     Direction intended_direction; 
-    bool is_waiting_response;
+    bool isWaitingResponse;
 };
 
 #endif // PEDESTRIAN_H

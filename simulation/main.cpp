@@ -7,8 +7,17 @@
 int main()
 {
     Controller controller(1);
+    // controller.addCarToEachStreet();
+    // controller.addPedestrianToStreet();
 
-    controller.displayInfo();
-
+    
+    while (true)
+    {
+        std::cout << "Start Sceduling: " << std::endl;
+        controller.calculatePriority();
+        controller.setPermission();
+        controller.displayInfo();
+        std::cout << "End Sceduling" << std::endl;
+    }
     return 0;
 }
