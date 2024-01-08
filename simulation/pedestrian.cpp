@@ -1,8 +1,8 @@
 #include "pedestrian.h"
 
 
-Pedestrian::Pedestrian(int id, Direction intended_direction, bool is_waiting_response)
-    : id(id), intended_direction(intended_direction), is_waiting_response(is_waiting_response) {}
+Pedestrian::Pedestrian(int id, Direction intended_direction, bool isWaitingResponse)
+    : id(id), intended_direction(intended_direction), isWaitingResponse(isWaitingResponse) {}
 
 void Pedestrian::displayInfo() const {
     std::cout << "Pedestrian ID: " << id << std::endl;
@@ -27,5 +27,5 @@ void Pedestrian::displayInfo() const {
     }
 
     std::cout << "Intended Navigation: " << navigationString << std::endl;
-    std::cout << "Waiting for Response: " << (is_waiting_response ? "Yes" : "No") << std::endl;
+    std::cout << "Waiting for Response: " << (isWaitingResponse ? "Yes" : "No") << std::endl;
 }

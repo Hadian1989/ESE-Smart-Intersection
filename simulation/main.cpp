@@ -1,30 +1,23 @@
 #include "street.h"
 #include "car.h"
 #include "pedestrian.h"
+#include "controller.h"
 #include "intersection.h"
 
-int main() {
-    // Create instances of Car
-    Car car1(1, 60, false, {10, 20}, EAST_TO_WEST, 25.5, false, true);
-    Car car2(2, 45, true, {30, 40}, SOUTH_TO_NORTH, 15.0, true, false);
+int main()
+{
+    Controller controller(1);
+    // controller.addCarToEachStreet();
+    // controller.addPedestrianToStreet();
 
-    // Create instances of Pedestrian
-    Pedestrian pedestrian1(101, EAST, false);
-    Pedestrian pedestrian2(102, WEST, true);
-
-    // Create instances of Street
-    Street street1(1001, EAST, 10, 2, 5);
-    street1.addCar(car1);
-    street1.addCar(car2);
-    street1.addPedestrian(pedestrian1);
-    street1.addPedestrian(pedestrian2);
-
-    // Create an instance of Intersection
-    Intersection intersection(500);
-    intersection.addStreet(street1, NORTH);
-
-    // Display information about the intersection
-    intersection.displayIntersection();
-
+    
+    while (true)
+    {
+        std::cout << "Start Sceduling: " << std::endl;
+        controller.calculatePriority();
+        controller.setPermission();
+        controller.displayInfo();
+        std::cout << "End Sceduling" << std::endl;
+    }
     return 0;
 }

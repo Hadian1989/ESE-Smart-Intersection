@@ -1,16 +1,17 @@
 #include "car.h"
+#include "pedestrian.h"
 
-Car::Car(int id, int velocity, bool is_emergency,
-         std::pair<int, int> position, Navigation intended_navigation,
-         double distance, bool is_waiting_response, bool is_get_permit)
-    : id(id), velocity(velocity), is_emergency(is_emergency),
-      position(position), intended_navigation(intended_navigation),
-      distance(distance), is_waiting_response(is_waiting_response), is_get_permit(is_get_permit) {}
+Car::Car(int id, int velocity, bool isEmergency,
+         std::pair<int, int> position, Navigation intended_navigation, Direction origin, Direction destination,
+         double distance, bool isWaitingResponse, bool isPermitted)
+    : id(id), velocity(velocity), isEmergency(isEmergency),
+      position(position), intended_navigation(intended_navigation), origin(origin), destination(destination),
+      distance(distance), isWaitingResponse(isWaitingResponse), isPermitted(isPermitted) {}
 
 void Car::displayInfo() const {
     std::cout << "Car ID: " << id << std::endl;
     std::cout << "Velocity: " << velocity << " mph" << std::endl;
-    std::cout << "Emergency Vehicle: " << (is_emergency ? "Yes" : "No") << std::endl;
+    std::cout << "Emergency Vehicle: " << (isEmergency ? "Yes" : "No") << std::endl;
     std::cout << "Position: (" << position.first << ", " << position.second << ")" << std::endl;
 
     // Display the intended navigation as a string
@@ -58,5 +59,11 @@ void Car::displayInfo() const {
 
     std::cout << "Intended Navigation: " << navigationString << std::endl;
     std::cout << "Distance: " << distance << " miles" << std::endl;
-    std::cout << "Waiting for Response: " << (is_waiting_response ? "Yes" : "No") << std::endl;
+    std::cout << "Waiting for Response: " << (isWaitingResponse ? "Yes" : "No") << std::endl;
 }
+const bool Car::isEmergency() const{
+    return isEmergency;
+};
+void Car::setPermission(bool newPermission) const{
+    is
+};

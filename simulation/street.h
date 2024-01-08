@@ -7,25 +7,39 @@
 #include "car.h"
 #include "pedestrian.h"
 
+enum Priority {
+    EMERGENCY,
+    HIGHTRAFFIC,
+    PASSENGER,
+    NORMAL
+};
 
-class Street {
+class Street
+{
 public:
-    // Default constructor
-    Street() : id(0), direction(SOUTH), numberOfCars(0), numberOfEmgCars(0), numberOfPedestrians(0) {}
-
     // Parameterized constructor
-    Street(int id, Direction direction, int numberOfCars, int numberOfEmgCars, int numberOfPedestrians);
+    Street(int id, Direction direction, std::vector<Car> cars, std::vector<Pedestrian> pedestrians);
 
-    void addCar(const Car& car);
-    void addPedestrian(const Pedestrian& pedestrian);
+    void addCar(const Car &car);
+    void addPedestrian(const Pedestrian &pedestrian);
     void displayTraffic() const;
+    bool calculateTraffic();
+
+    const int getId() const;
+    const std::vector<Car> &getCars() const;
+    const std::vector<Pedestrian> &getPedestrians() const;
+    const bool hasPedestrians() const;
+    // Setters for hasPriority
+    void setPriority(Priority priority);
+    Priority getPriority();
+
+
 
 private:
     int id;
+    bool isTrafficHigh;
+    Priority priority;
     Direction direction;
-    int numberOfCars;
-    int numberOfEmgCars;
-    int numberOfPedestrians;
     std::vector<Car> cars;
     std::vector<Pedestrian> pedestrians;
 };

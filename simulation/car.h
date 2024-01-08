@@ -1,6 +1,6 @@
 #ifndef CAR_H
 #define CAR_H
-
+#include "pedestrian.h"
 #include <iostream>
 #include <string>
 
@@ -22,20 +22,24 @@ enum Navigation {
 
 class Car {
 public:
-    Car(int id, int velocity, bool is_emergency, 
-        std::pair<int, int> position, Navigation intended_navigation,
-        double distance, bool is_waiting_response, bool is_get_permit);
+    Car(int id, int velocity, bool isEmergency, 
+        std::pair<int, int> position, Navigation intended_navigation, Direction origin, Direction destination,
+        double distance, bool isWaitingResponse, bool isPermitted);
     void displayInfo() const;
+    void setPermission(bool permission) const;
+    const bool isEmergency() const;
 
 private:
     int id;
     int velocity;
-    bool is_emergency;
+    bool isEmergency;
     std::pair<int, int> position; // Assuming a 2D position (x, y)
     Navigation intended_navigation;  // Enum to represent intended direction
+    Direction origin;
+    Direction destination;
     double distance;
-    bool is_waiting_response;
-    bool is_get_permit;
+    bool isWaitingResponse;
+    bool isPermitted;
 };
 
 #endif // CAR_H

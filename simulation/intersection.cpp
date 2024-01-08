@@ -1,14 +1,20 @@
 #include "intersection.h"
 
-Intersection::Intersection(int id, std::vector<Street>& street) : id(id) {}
+Intersection::Intersection(int id, std::vector<Street> streets) : id(id) , streets(streets){}
 
-void Intersection::addStreet(const Street& street, int direction) {
-    if (direction >= 0 && direction < 4) {
-        streets[direction] = street;
-    } else {
-        std::cerr << "Invalid direction for adding street to intersection." << std::endl;
-    }
+void Intersection::addStreet(const Street &street) {
+    streets.push_back(street);
 }
+void Intersection::addCarsToStreet(int streetId, const std::vector<Car> &cars){
+    for (const auto &car : cars){
+        streets[streetId].addCar(car);
+    }
+};
+void Intersection::addPedestriansToStreet(int streetId, const std::vector<Pedestrian> &pedestrians){
+    for (const auto &pedestrian : pedestrians){
+        streets[streetId].addPedestrian(pedestrian);
+    }
+};
 
 void Intersection::displayIntersection() const {
     std::cout << "Intersection ID: " << id << std::endl;
@@ -34,4 +40,8 @@ void Intersection::displayIntersection() const {
         streets[i].displayTraffic();
         std::cout << std::endl;
     }
+}
+const std::vector<Street> Intersection::getStreets() const
+{
+    return streets;
 }
