@@ -5,5 +5,5 @@ Group #01
 Team members:
 - Behnoosh Hashemi Hendokushi: 7213828
 - Ghazaleh Hadian Ghahfarokhi: 7216547
-- Shirin
-- Kanika
+- Shirin Babaeikouros: 7219095
+- Kanika Sehgal: 7219646
