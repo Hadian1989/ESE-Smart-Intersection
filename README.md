@@ -1,4 +1,4 @@
-# Networked Traffic Control System for Autonomous Cars-ESE
+## Networked Traffic Control System for Autonomous Cars-ESE
 This repository represents the smart traffic control system in an intersection for the course Software Systems Engineering(ESE) course, winter 2024.
 
 Group #01

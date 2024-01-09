@@ -96,11 +96,11 @@ const bool Car::getPermission() {
 };
 void Car::setPermission(bool newPermission)
 {
-    isPermitted = newPermission;
+     isPermitted = newPermission;
 }
-void Car::setVelocity(double velocity)
+void Car::setVelocity(double newVelocity)
 {
-    isPermitted = velocity;
+    velocity = newVelocity;
 }
 bool Car::compareCarsByDistance(const Car& car1, const Car& car2) {
     return car1.getDistance() < car2.getDistance();

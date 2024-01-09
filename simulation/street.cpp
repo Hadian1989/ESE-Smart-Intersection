@@ -2,10 +2,10 @@
 #include "pedestrian.h"
 #include "street.h"
 #include <iostream>
-#include <algorithm>  
+#include <algorithm>
 
 // Parameterized constructor
-Street::Street(int id, Direction direction) : id(id), direction(direction), cars(cars), pedestrians(pedestrians) {}
+Street::Street(int id, Priority priority, Direction direction) : id(id), direction(direction), priority(priority), cars(cars), pedestrians(pedestrians) {}
 
 // Method to add a car to the street
 void Street::addCar(const Car &car)
@@ -57,7 +57,7 @@ void Street::displayTraffic() const
 }
 
 // Method to calculate traffic conditions
-bool Street::calculateTraffic()
+bool Street::calculateTraffic(std::vector<Car> cars)
 {
     return cars.size() >= 15;
 }
@@ -74,20 +74,21 @@ const Direction Street::getDirection() const
 {
     return direction;
 };
-const std::string  Street::getDirectionName() const
+const std::string Street::getDirectionName() const
 {
-       switch (direction) {
-            case SOUTH:
-                return "SOUTH";
-            case WEST:
-                return "WEST";
-            case NORTH:
-                return "NORTH";
-            case EAST:
-                return "EAST";
-            default:
-                return "UNKNOWN";
-        }
+    switch (direction)
+    {
+    case SOUTH:
+        return "SOUTH";
+    case WEST:
+        return "WEST";
+    case NORTH:
+        return "NORTH";
+    case EAST:
+        return "EAST";
+    default:
+        return "UNKNOWN";
+    }
 };
 const bool Street::hasPedestrians() const
 {
@@ -99,13 +100,13 @@ const int Street::getId() const
 }
 void Street::setPriority(Priority newPriority)
 {
-    priority = priority;
+    priority = newPriority;
 }
 Priority Street::getPriority()
 {
     return priority;
 }
-bool Street::checkEmergency()
+bool Street::checkEmergency(std::vector<Car> cars)
 {
     for (auto &car : cars)
     {
@@ -113,7 +114,6 @@ bool Street::checkEmergency()
         {
             return true;
         }
-    
     }
     return false;
 }
@@ -127,5 +127,4 @@ void Street::sortAllStreetCarsByDistance(const Street street)
     // Now, sort the combined vector of cars
     std::sort(cars.begin(), cars.end(), [](const Car &car1, const Car &car2)
               { return car1.getDistance() < car2.getDistance(); });
-
 };

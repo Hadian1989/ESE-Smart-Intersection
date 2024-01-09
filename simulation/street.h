@@ -18,13 +18,13 @@ class Street
 {
 public:
     // Parameterized constructor
-    Street(int id, Direction direction);
+    Street(int id, Priority priority,Direction direction);
 
     void addCar(const Car &car);
     void addPedestrian(const Pedestrian &pedestrian);
     void displayTraffic() const;
-    bool calculateTraffic();
-    bool checkEmergency();
+    bool calculateTraffic(std::vector<Car> cars);
+    bool checkEmergency(std::vector<Car> cars);
 
     const int getId() const;
     const std::vector<Car> &getCars() const;

@@ -12,10 +12,10 @@ int main()
     Intersection intersection(1, {}); // Assuming Intersection ID is 1
 
     // Add four streets to the intersection
-    Street street1(1, SOUTH);
-    Street street2(2, WEST);
-    Street street3(3, NORTH);
-    Street street4(4, EAST);
+    Street street1(1,NORMAL, SOUTH);
+    Street street2(2,NORMAL,  WEST);
+    Street street3(3,NORMAL,  NORTH);
+    Street street4(4,NORMAL,  EAST);
     Pedestrian pedestrian1(1, SOUTH, true);
     Pedestrian pedestrian2(2, WEST, true);
     Car car1(1, 35, false, {20, 30}, SOUTH_To_EAST, SOUTH, EAST, 500, false, false);
@@ -39,7 +39,8 @@ int main()
     // Create a Controller instance and pass the Intersection
     Controller controller(1, intersection);
 
-    controller.calculateTrafficCongestion(intersection);
+    // controller.calculateTrafficCongestion(intersection);
+    controller.setStreetPriority(intersection);
     controller.setCarPermission(intersection);
     auto startDisplay = std::chrono::high_resolution_clock::now();
     controller.movingSimulation(intersection);

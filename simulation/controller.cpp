@@ -20,68 +20,85 @@ void Controller::displayInfo()
     intersection.displayIntersection();
 }
 
-bool Controller::calculateTrafficCongestion(Intersection intersection)
-{
-    std::vector<Street> streets = intersection.getStreets();
-    for (auto &street : streets)
-    {
-        std::cout << "Traffic Calculation for street:" << street.getId() << std::endl;
-        int totalCars = street.getCars().size();
-        bool traffic = street.calculateTraffic();
-        std::cout << "The traffic in street " << street.getId() << ": With " << totalCars << " cars is" << (traffic ? " HIGH" : " LOW") << std::endl;
-        if (traffic)
-        {
-            return true;
-        }
-    }
-    return false;
-}
+// bool Controller::calculateTrafficCongestion(Intersection intersection)
+// {
+//     std::vector<Street> streets = intersection.getStreets();
+//     for (auto &street : streets)
+//     {
+//         std::cout << "Traffic Calculation for street:" << street.getId() << std::endl;
+//         int totalCars = street.getCars().size();
+//         // bool traffic = street.calculateTraffic();
+//         std::cout << "The traffic in street " << street.getId() << ": With " << totalCars << " cars is" << ((totalCars > 15) ? " HIGH" : " LOW") << std::endl;
+//         if (totalCars > 15)
+//         {
+//             street.setPriority()
+//         }
+//     }
+//     return false;
+// }
 void Controller::setStreetPriority(Intersection intersection)
 {
-    calculateTrafficCongestion(intersection);
+    std::cout << "setStreetPriority Start" << std::endl;
     // Priority Orders: EMERGENCY > PEDESTRIAN > HIGH_CONGESTION > NORMAL
     std::vector<Street> streets = intersection.getStreets();
     for (auto &street : streets)
     {
         std::vector<Car> cars = street.getCars();
-        if (street.checkEmergency())
+        if (street.checkEmergency(cars))
         {
+            // std::cout << "street.setPriority(EMERGENCY)" << std::endl;
             street.setPriority(EMERGENCY);
-            break;
+            std::cout << street.getPriority() << std::endl;
+            // break;
         }
         if (street.hasPedestrians())
         {
+            // std::cout << "street.setPriority(PASSENGER)" << std::endl;
+
             street.setPriority(PASSENGER);
-            break;
+            std::cout << street.getPriority() << std::endl;
+
+            // break;
         }
-        if (street.calculateTraffic())
+        if (street.calculateTraffic(cars))
         {
+            // std::cout << "street.setPriority(HIGHTRAFFIC)" << std::endl;
+
             street.setPriority(HIGHTRAFFIC);
-            break;
+            // break;
         }
+        // std::cout << "street.setPriority(NORMAL)" << std::endl;
+
         street.setPriority(NORMAL);
     }
+        std::cout << "setStreetPriority END" << std::endl;
+
 }
 
 void Controller::setCarPermission(Intersection intersection)
 {
-    setStreetPriority(intersection);
+    std::cout << "setCarPermission Start" << std::endl;
     double speed_limit = 40.0;
     std::vector<Street> streets = intersection.getStreets();
     if (intersection.isThereEmergencyStreet(streets))
     {
-        std::cout << "Threr is Emergency Situation"<< std::endl;
+        std::cout << "Threr is Emergency Situation" << std::endl;
         for (auto &street : streets)
         {
             street.sortAllStreetCarsByDistance(street);
             std::vector<Car> cars = street.getCars();
-            if (street.getPriority() == 0)
+            std::cout << "In the loop we are : " << street.getPriority() << std::endl;
+            if (street.getPriority() == EMERGENCY)
             {
+                std::cout << "Emergency Situation in street: " << street.getId() << std::endl;
                 for (auto &car : cars)
                 {
                     if (car.getIsEmergency())
                     {
                         car.setPermission(true);
+                        std::cout << car.getPermission() << std::endl;
+                        car.setVelocity(speed_limit);
+                        std::cout << car.getVelocity() << std::endl;
                     }
 
                     car.setPermission(false);
@@ -97,17 +114,16 @@ void Controller::setCarPermission(Intersection intersection)
                 }
             }
         }
-        return;
     }
     else if (intersection.isTherePedestrianStreet(streets))
     {
-        std::cout << "Threr is Pedestrian Situation" << std::endl;
+        std::cout << "Pedestrian Situation" << std::endl;
 
         for (auto &street : streets)
         {
             street.sortAllStreetCarsByDistance(street);
             std::vector<Car> cars = street.getCars();
-            if (street.getPriority() == 1)
+            if (street.getPriority() == PASSENGER)
             {
                 for (auto &car : cars)
                 {
@@ -132,17 +148,16 @@ void Controller::setCarPermission(Intersection intersection)
                 }
             }
         }
-        return;
     }
     else if (intersection.isThereHighCongestionStreet(streets))
     {
-        std::cout << "Threr is High Congestion Situation"<< std::endl;
+        std::cout << "Threr is High Congestion Situation" << std::endl;
 
         for (auto &street : streets)
         {
             street.sortAllStreetCarsByDistance(street);
             std::vector<Car> cars = street.getCars();
-            if (street.getPriority() == 2)
+            if (street.getPriority() == HIGHTRAFFIC)
             {
                 int max_index = 20;
                 int index = 0;
@@ -173,7 +188,8 @@ void Controller::setCarPermission(Intersection intersection)
                 }
             }
         }
-        return;
+    std::cout << "setStreetPriority END" << std::endl;
+
     }
 }
 void Controller::checkVehiclesCollision()
@@ -208,8 +224,9 @@ void Controller::movingSimulation(Intersection intersection)
 
         for (auto &car : cars)
         {
-            std::cout << "Car Id: " << car.getId() << " in Street: " << street.getDirectionName() << " - Velocity: " << car.getVelocity() << (car.getIsEmergency() ? " is an Emergency Vahicle" : "")
-                      << (car.getPermission() ? " has permission to pass." : " has to stop and wait.") << std::endl;
+            std::cout << car.getPermission() << std::endl;
+            std::cout << "Car Id: " << car.getId() << " in Street: " << street.getDirectionName() << " - Velocity: " << car.getVelocity() << (car.getIsEmergency() ? " is an Emergency Vahicle" : " is a Normal Car") << (car.getPermission() ? " has permission to pass." : " has to stop and wait.") << std::endl;
+            std::cout << "Car Id: " << car.getId()  << (car.getPermission() ? " has permission to pass." : " has to stop and wait.") << std::endl;
         }
     }
 }
