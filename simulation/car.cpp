@@ -1,7 +1,7 @@
 #include "car.h"
 #include "pedestrian.h"
 
-Car::Car(int id, int velocity, bool isEmergency,
+Car::Car(int id, double velocity, bool isEmergency,
          std::pair<int, int> position, Navigation intended_navigation, Direction origin, Direction destination,
          double distance, bool isWaitingResponse, bool isPermitted)
     : id(id), velocity(velocity), isEmergency(isEmergency),
@@ -63,6 +63,10 @@ void Car::displayInfo() const
     std::cout << "Distance: " << distance << " miles" << std::endl;
     std::cout << "Waiting for Response: " << (isWaitingResponse ? "Yes" : "No") << std::endl;
 }
+const int Car::getId()
+{
+    return id;
+};
 const bool Car::getIsEmergency()
 {
     return isEmergency;
@@ -75,6 +79,10 @@ const Direction Car::getDestination()
 {
     return destination;
 };
+const double Car::getVelocity()
+{
+    return velocity;
+};
 const Navigation Car::getIntendedNavigation()
 {
     return intended_navigation;
@@ -82,10 +90,17 @@ const Navigation Car::getIntendedNavigation()
 const double Car::getDistance() const
 {
     return distance;
+}
+const bool Car::getPermission() {
+    return isPermitted;
 };
 void Car::setPermission(bool newPermission)
 {
     isPermitted = newPermission;
+}
+void Car::setVelocity(double velocity)
+{
+    isPermitted = velocity;
 }
 bool Car::compareCarsByDistance(const Car& car1, const Car& car2) {
     return car1.getDistance() < car2.getDistance();

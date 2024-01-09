@@ -15,10 +15,10 @@ public:
     void addPedestriansToStreet(int streetID, const std::vector<Pedestrian> &pedestrians);
     void displayIntersection() const;
     const std::vector<Street> getStreets() const;
-    bool isThereEmergencyStreet();
-    bool isThereHighCongestionStreet();
-    bool isTherePedestrianStreet();
-    std::vector<Car> sortAllIntersectionCarsByDistance();
+    bool isThereEmergencyStreet(std::vector<Street> streets);
+    bool isThereHighCongestionStreet(std::vector<Street> streets);
+    bool isTherePedestrianStreet(std::vector<Street> streets);
+    void sortAllIntersectionCarsByDistance(std::vector<Street> streets);
 
 private:
     int id;

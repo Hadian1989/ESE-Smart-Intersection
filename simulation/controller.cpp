@@ -4,36 +4,7 @@
 #include "street.h"
 #include "pedestrian.h"
 
-Controller::Controller(int id)
-{
-    // Create an Intersection instance
-    Intersection intersection(1, {}); // Assuming Intersection ID is 1
-
-    // Add four streets to the intersection
-    Street street1(1, SOUTH);
-    Street street2(2, WEST);
-    Street street3(3, NORTH);
-    Street street4(4, EAST);
-    Pedestrian pedestrian1(1, SOUTH, true);
-    Pedestrian pedestrian2(2, WEST, true);
-    Car car1(1, 35, false, {20, 30}, SOUTH_To_EAST, SOUTH, EAST, 500, false, false);
-    Car car2(2, 40, false, {205, 300}, NORTH_TO_SOUTH, NORTH, SOUTH, 300, false, false);
-    Car car3(3, 30, false, {100, 100}, EAST_TO_NORTH, EAST, NORTH, 100, false, false);
-    Car car4(4, 70, true, {60, 10}, WEST_TO_EAST, WEST, EAST, 10, false, false);
-    Car car5(5, 80, true, {10, 10}, EAST_TO_WEST, EAST, WEST, 10, false, false);
-
-    street1.addCar(car1);
-    street2.addCar(car2);
-    street2.addCar(car3);
-    street3.addCar(car4);
-    street1.addCar(car5);
-    street4.addPedestrian(pedestrian1);
-    street3.addPedestrian(pedestrian2);
-    intersection.addStreet(street1); // South
-    intersection.addStreet(street2); // West
-    intersection.addStreet(street3); // North
-    intersection.addStreet(street4); // East
-};
+Controller::Controller(int id, Intersection intersection){};
 void Controller::addCarToEachStreet(int intersectionId, int streetId, const std::vector<Car> &cars)
 {
     intersection.addCarsToStreet(streetId, cars);
@@ -49,7 +20,7 @@ void Controller::displayInfo()
     intersection.displayIntersection();
 }
 
-bool Controller::calculateTrafficCongestion()
+bool Controller::calculateTrafficCongestion(Intersection intersection)
 {
     std::vector<Street> streets = intersection.getStreets();
     for (auto &street : streets)
@@ -57,7 +28,7 @@ bool Controller::calculateTrafficCongestion()
         std::cout << "Traffic Calculation for street:" << street.getId() << std::endl;
         int totalCars = street.getCars().size();
         bool traffic = street.calculateTraffic();
-        std::cout << "The traffic in street " << street.getId() << ": With " << totalCars << " cars is" << (traffic ? "HIGH" : "LOW") << std::endl;
+        std::cout << "The traffic in street " << street.getId() << ": With " << totalCars << " cars is" << (traffic ? " HIGH" : " LOW") << std::endl;
         if (traffic)
         {
             return true;
@@ -65,8 +36,9 @@ bool Controller::calculateTrafficCongestion()
     }
     return false;
 }
-void Controller::setStreetPriority()
+void Controller::setStreetPriority(Intersection intersection)
 {
+    calculateTrafficCongestion(intersection);
     // Priority Orders: EMERGENCY > PEDESTRIAN > HIGH_CONGESTION > NORMAL
     std::vector<Street> streets = intersection.getStreets();
     for (auto &street : streets)
@@ -91,15 +63,19 @@ void Controller::setStreetPriority()
     }
 }
 
-void Controller::setCarPermission()
+void Controller::setCarPermission(Intersection intersection)
 {
+    setStreetPriority(intersection);
+    double speed_limit = 40.0;
     std::vector<Street> streets = intersection.getStreets();
-    if (intersection.isThereEmergencyStreet())
+    if (intersection.isThereEmergencyStreet(streets))
     {
+        std::cout << "Threr is Emergency Situation"<< std::endl;
         for (auto &street : streets)
         {
-            std::vector<Car> cars = street.sortAllStreetCarsByDistance(street);
-            if (street.getPriority() == EMERGENCY)
+            street.sortAllStreetCarsByDistance(street);
+            std::vector<Car> cars = street.getCars();
+            if (street.getPriority() == 0)
             {
                 for (auto &car : cars)
                 {
@@ -109,6 +85,7 @@ void Controller::setCarPermission()
                     }
 
                     car.setPermission(false);
+                    car.setVelocity(0);
                 }
             }
             else
@@ -116,21 +93,26 @@ void Controller::setCarPermission()
                 for (auto &car : cars)
                 {
                     car.setPermission(false);
+                    car.setVelocity(0);
                 }
             }
         }
         return;
     }
-    else if (intersection.isTherePedestrianStreet())
+    else if (intersection.isTherePedestrianStreet(streets))
     {
+        std::cout << "Threr is Pedestrian Situation" << std::endl;
+
         for (auto &street : streets)
         {
-            std::vector<Car> cars = street.sortAllStreetCarsByDistance(street);
-            if (street.getPriority() == PASSENGER)
+            street.sortAllStreetCarsByDistance(street);
+            std::vector<Car> cars = street.getCars();
+            if (street.getPriority() == 1)
             {
                 for (auto &car : cars)
                 {
                     car.setPermission(false);
+                    car.setVelocity(0);
                 }
             }
             else
@@ -140,22 +122,27 @@ void Controller::setCarPermission()
                     if (car.getDestination() == street.getDirection())
                     {
                         car.setPermission(false);
+                        car.setVelocity(0);
                     }
                     else
                     {
                         car.setPermission(true);
+                        car.setVelocity(speed_limit);
                     }
                 }
             }
         }
         return;
     }
-    else if (intersection.isThereHighCongestionStreet())
+    else if (intersection.isThereHighCongestionStreet(streets))
     {
+        std::cout << "Threr is High Congestion Situation"<< std::endl;
+
         for (auto &street : streets)
         {
-            std::vector<Car> cars = street.sortAllStreetCarsByDistance(street);
-            if (street.getPriority() == HIGHTRAFFIC)
+            street.sortAllStreetCarsByDistance(street);
+            std::vector<Car> cars = street.getCars();
+            if (street.getPriority() == 2)
             {
                 int max_index = 20;
                 int index = 0;
@@ -165,25 +152,28 @@ void Controller::setCarPermission()
                     if (index <= 20)
                     {
                         car.setPermission(true);
+                        car.setVelocity(speed_limit);
                     }
                     car.setPermission(false);
+                    car.setVelocity(0);
                     index++;
                 }
             }
             else
             {
-                std::vector<Car> allCars = intersection.sortAllIntersectionCarsByDistance();
-                // Normal Condition in All streets towards the intersection
-                for (auto &car : allCars)
+                for (auto &street : streets)
                 {
-                    car.setPermission(true);
+                    street.sortAllStreetCarsByDistance(street);
+                    std::vector<Car> cars = street.getCars();
+                    // Normal Condition in All streets towards the intersection
+                    for (auto &car : cars)
+                    {
+                        car.setPermission(true);
+                    }
                 }
             }
         }
         return;
-    }
-    else
-    {
     }
 }
 void Controller::checkVehiclesCollision()
@@ -205,4 +195,24 @@ void Controller::checkVehiclesCollision()
             // }
         }
     };
+}
+void Controller::movingSimulation(Intersection intersection)
+{
+
+    setCarPermission(intersection);
+    std::vector<Street> streets = intersection.getStreets();
+
+    for (auto &street : streets)
+    {
+        std::vector<Car> cars = street.getCars();
+
+        for (auto &car : cars)
+        {
+            std::cout << "Car Id: " << car.getId() << " in Street: " << street.getDirectionName() << " - Velocity: " << car.getVelocity() << (car.getIsEmergency() ? " is an Emergency Vahicle" : "")
+                      << (car.getPermission() ? " has permission to pass." : " has to stop and wait.") << std::endl;
+        }
+    }
+}
+void Controller::upadteTrafficFlow(Intersection intersection)
+{
 }

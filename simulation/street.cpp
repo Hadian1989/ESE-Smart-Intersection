@@ -74,6 +74,21 @@ const Direction Street::getDirection() const
 {
     return direction;
 };
+const std::string  Street::getDirectionName() const
+{
+       switch (direction) {
+            case SOUTH:
+                return "SOUTH";
+            case WEST:
+                return "WEST";
+            case NORTH:
+                return "NORTH";
+            case EAST:
+                return "EAST";
+            default:
+                return "UNKNOWN";
+        }
+};
 const bool Street::hasPedestrians() const
 {
     return (pedestrians.size() > 0);
@@ -98,10 +113,11 @@ bool Street::checkEmergency()
         {
             return true;
         }
-        break;
+    
     }
-};
-std::vector<Car> Street::sortAllStreetCarsByDistance(const Street street)
+    return false;
+}
+void Street::sortAllStreetCarsByDistance(const Street street)
 {
     std::vector<Car> cars;
 
@@ -111,5 +127,5 @@ std::vector<Car> Street::sortAllStreetCarsByDistance(const Street street)
     // Now, sort the combined vector of cars
     std::sort(cars.begin(), cars.end(), [](const Car &car1, const Car &car2)
               { return car1.getDistance() < car2.getDistance(); });
-    return cars;
+
 };

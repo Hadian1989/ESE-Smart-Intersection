@@ -34,7 +34,8 @@ public:
     void setPriority(Priority priority);
     Priority getPriority();
     const Direction getDirection() const;
-    std::vector<Car> sortAllStreetCarsByDistance(const Street street);
+    const std::string  getDirectionName() const;
+    void sortAllStreetCarsByDistance(const Street street);
 
 
 
