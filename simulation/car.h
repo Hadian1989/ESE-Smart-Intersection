@@ -25,7 +25,6 @@ public:
     Car(int id, double velocity, bool isEmergency, 
         std::pair<int, int> position, Navigation intended_navigation, Direction origin, Direction destination,
         double distance, bool isWaitingResponse, bool isPermitted);
-    void displayInfo() const;
     void setPermission(bool permission);
     void setVelocity(double velocity);
     const int getId();

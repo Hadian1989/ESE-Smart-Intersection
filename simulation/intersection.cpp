@@ -25,11 +25,12 @@ bool Intersection::isThereEmergencyStreet(std::vector<Street> streets)
 {
     for (auto &street : streets)
     {
+        std::cout << "in the loop isThereEmergencyStreet " << street.getId() << std::endl;
         if (street.getPriority() == EMERGENCY)
         {
+            std::cout << "Intersection EMERGENCY: " << id << std::endl;
             return true;
         }
-        
     }
     return false;
 }
@@ -41,7 +42,6 @@ bool Intersection::isThereHighCongestionStreet(std::vector<Street> streets)
         {
             return true;
         }
-        
     }
     return false;
 }
@@ -53,39 +53,10 @@ bool Intersection::isTherePedestrianStreet(std::vector<Street> streets)
         {
             return true;
         }
-        
     }
     return false;
 }
 
-void Intersection::displayIntersection() const
-{
-    std::cout << "Intersection ID: " << id << std::endl;
-
-    for (int i = 0; i < 4; ++i)
-    {
-        std::string direction;
-        switch (i)
-        {
-        case 0:
-            direction = "North";
-            break;
-        case 1:
-            direction = "South";
-            break;
-        case 2:
-            direction = "East";
-            break;
-        case 3:
-            direction = "West";
-            break;
-        }
-
-        std::cout << "Street in " << direction << " direction:" << std::endl;
-        streets[i].displayTraffic();
-        std::cout << std::endl;
-    }
-}
 const std::vector<Street> Intersection::getStreets() const
 {
     return streets;

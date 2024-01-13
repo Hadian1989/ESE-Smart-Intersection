@@ -8,7 +8,7 @@
 #include "pedestrian.h"
 
 enum Priority {
-    EMERGENCY,
+    EMERGENCY= 1,
     HIGHTRAFFIC,
     PASSENGER,
     NORMAL
@@ -18,11 +18,10 @@ class Street
 {
 public:
     // Parameterized constructor
-    Street(int id, Priority priority,Direction direction);
+    Street(int id, Direction direction,Priority priority);
 
     void addCar(const Car &car);
     void addPedestrian(const Pedestrian &pedestrian);
-    void displayTraffic() const;
     bool calculateTraffic(std::vector<Car> cars);
     bool checkEmergency(std::vector<Car> cars);
 

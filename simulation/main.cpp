@@ -12,25 +12,25 @@ int main()
     Intersection intersection(1, {}); // Assuming Intersection ID is 1
 
     // Add four streets to the intersection
-    Street street1(1,NORMAL, SOUTH);
-    Street street2(2,NORMAL,  WEST);
-    Street street3(3,NORMAL,  NORTH);
-    Street street4(4,NORMAL,  EAST);
+    Street street1(1, SOUTH, NORMAL);
+    Street street2(2,  WEST, NORMAL);
+    Street street3(3, NORTH, NORMAL);
+    Street street4(4, EAST, NORMAL);
     Pedestrian pedestrian1(1, SOUTH, true);
     Pedestrian pedestrian2(2, WEST, true);
     Car car1(1, 35, false, {20, 30}, SOUTH_To_EAST, SOUTH, EAST, 500, false, false);
     Car car2(2, 40, false, {205, 300}, NORTH_TO_SOUTH, NORTH, SOUTH, 300, false, false);
     Car car3(3, 30, false, {100, 100}, EAST_TO_NORTH, EAST, NORTH, 100, false, false);
     Car car4(4, 70, true, {60, 10}, WEST_TO_EAST, WEST, EAST, 10, false, false);
-    Car car5(5, 80, true, {10, 10}, EAST_TO_WEST, EAST, WEST, 10, false, false);
+    // Car car5(5, 80, true, {10, 10}, EAST_TO_WEST, EAST, WEST, 10, false, false);
 
     street1.addCar(car1);
     street2.addCar(car2);
     street2.addCar(car3);
     street3.addCar(car4);
-    street1.addCar(car5);
+    // street1.addCar(car5);
     street4.addPedestrian(pedestrian1);
-    street3.addPedestrian(pedestrian2);
+    // street3.addPedestrian(pedestrian2);
     intersection.addStreet(street1); // South
     intersection.addStreet(street2); // West
     intersection.addStreet(street3); // North
@@ -41,14 +41,14 @@ int main()
 
     // controller.calculateTrafficCongestion(intersection);
     controller.setStreetPriority(intersection);
-    controller.setCarPermission(intersection);
+    // controller.setCarPermission(intersection);
     auto startDisplay = std::chrono::high_resolution_clock::now();
     controller.movingSimulation(intersection);
     auto endDisplay = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> displayDuration = endDisplay - startDisplay;
 
-    // while (true)
-    // {
+    while (true)
+    {
     // auto startPriority = std::chrono::high_resolution_clock::now();
     // std::cout << "Start Scheduling: " << std::endl;
     // controller.calculateTrafficCongestion();
@@ -72,6 +72,6 @@ int main()
     std::cout << "Simulation took " << displayDuration.count() << " milliseconds." << std::endl;
 
     std::cout << "End Scheduling" << std::endl;
-    // }
+    }
     return 0;
 }
