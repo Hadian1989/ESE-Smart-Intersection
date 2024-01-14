@@ -11,19 +11,12 @@ enum Direction
     NORTH,
     EAST
 };
-enum Priority
+enum State
 {
     NORMAL,
     EMERGENCY,
     PASSENGER,
     HIGHTRAFFIC
-};
-enum State
-{
-    Emergency_state,
-    Pedestrian_state,
-    Traffic_state,
-    Normal_state
 };
 class Pedestrian
 {
@@ -31,13 +24,16 @@ public:
     int id;
     Direction destination;
     bool isWaitingResponse;
+    bool isPermitted;
     Pedestrian(int id, Direction destination)
         : id(id), destination(destination) {}
+    void setPermission(bool newPermission)
+    {
+        this->isPermitted = newPermission;
+    }
 };
-
 class Car
 {
-    // private:
 public:
     int id;
     double velocity;
@@ -79,11 +75,11 @@ class Street
 public:
     int id;
     Direction direction;
-    Priority priority;
+    State state;
     std::vector<Car> cars;
     std::vector<Pedestrian> pedestrians;
 
-    Street(int id, Direction direction, Priority priority) : id(id), direction(direction), priority(priority) {}
+    Street(int id, Direction direction, State state) : id(id), direction(direction), state(state) {}
 
     void addCar(const Car car)
     {
@@ -104,9 +100,13 @@ public:
             }
         }
     }
-    void setCarPermission(int car_id, bool permission)
+    void setCarPermission(int carId, bool permission)
     {
-        this->cars[car_id].setPermission(permission);
+        this->cars[carId].setPermission(permission);
+    }
+    void setPedestrianPermission(int pedestrianId, bool permission)
+    {
+        this->pedestrians[pedestrianId].setPermission(permission);
     }
     void setCarVelocity(int car_id, double new_velocity)
     {
@@ -153,7 +153,7 @@ public:
     }
     const std::string getPriorityName() const
     {
-        switch (this->priority)
+        switch (this->state)
         {
         case EMERGENCY:
             return "EMERGENCY";
@@ -171,9 +171,9 @@ public:
         return !pedestrians.empty();
     }
 
-    void setPriority(Priority newPriority)
+    void setState(State newState)
     {
-        this->priority = newPriority;
+        this->state = newState;
     }
 
     bool hasEmergencyCar(std::vector<Car> &cars) const
@@ -201,7 +201,7 @@ class Intersection
 public:
     int id;
     std::vector<Street> streets;
-    State state = Normal_state;
+    State state = NORMAL;
     bool isExtremeWeather;
     bool isDay;
     Intersection(int id, bool isExtremeWeather, bool isDay) : id(id), isExtremeWeather(isExtremeWeather), isDay(isDay) {}
@@ -263,7 +263,7 @@ public:
     {
         for (auto street : streets)
         {
-            if (street.priority == PASSENGER)
+            if (street.state == PASSENGER)
             {
                 return true;
             }
@@ -333,41 +333,42 @@ public:
             {
                 std::cout << street.getDirectionName() << " street has  EMERGENCY situation" << std::endl;
 
-                intersection.state = State::Emergency_state;
+                intersection.state = State::EMERGENCY;
             }
             else if (street.hasPedestrians())
             {
                 std::cout << street.getDirectionName() << " street has PEDESTRIAN situation" << std::endl;
-                street.priority = Priority::PASSENGER;
-                intersection.state = State::Pedestrian_state;
+                street.state = State::PASSENGER;
+                intersection.state = State::PASSENGER;
             }
             else if (street.calculateTraffic(street.cars))
             {
                 std::cout << street.getDirectionName() << " street has HIGH TRAFFIC situation" << std::endl;
-                street.priority = Priority::HIGHTRAFFIC;
-                intersection.state = State::Traffic_state;
+                street.state = State::HIGHTRAFFIC;
+                intersection.state = State::HIGHTRAFFIC;
             }
             else
             {
-                street.priority = Priority::NORMAL;
-                intersection.state = State::Normal_state;
+                street.state = State::NORMAL;
+                intersection.state = State::NORMAL;
                 std::cout << street.getDirectionName() << " street has  NORMAL situation " << std::endl;
             }
         }
         std::cout << "set street priority task: end" << std::endl;
     }
-    void setCarPermission(Intersection intersection)
+    void setPassPermission(Intersection intersection)
     {
-        std::cout << "set car permission task: start" << std::endl;
+        std::cout << "set permission task: start" << std::endl;
         std::vector<Street> streets = intersection.getStreets();
         switch (intersection.state)
         {
-        case Emergency_state:
+        case EMERGENCY:
             for (auto &street : streets)
             {
-                if (street.priority == EMERGENCY)
+                if (street.state == EMERGENCY)
                 {
                     std::vector<Car> cars = street.getCars();
+                    std::vector<Pedestrian> pedestrians = street.getPedestrians();
                     for (auto &car : cars)
                     {
                         if (car.isEmergency)
@@ -382,14 +383,19 @@ public:
                                 street.setCarVelocity(car.id, speed_limit);
                             }
 
-                            std::cout << "car id: " << car.id << " in " << street.getDirectionName() << " street got permitted to pass" << std::endl;
+                            std::cout << "car id: " << car.id << " in " << street.getDirectionName() << " street got permit to pass" << std::endl;
                         }
                         else
                         {
-                            std::cout << "car id: " << car.id << " in " << street.getDirectionName() << " street did not get permitted to pass" << std::endl;
+                            std::cout << "car id: " << car.id << " in " << street.getDirectionName() << " street did not get permit to pass" << std::endl;
                             street.setCarPermission(car.id, false);
                             street.setCarVelocity(car.id, 0);
                         }
+                    }
+                    for (auto &pedestrian : pedestrians)
+                    {
+                        street.setPedestrianPermission(pedestrian.id, false);
+                        std::cout << "pedestrian id: " << pedestrian.id << " in " << street.getDirectionName() << " street did not get permit to pass" << std::endl;
                     }
                 }
                 else
@@ -397,24 +403,31 @@ public:
                     std::vector<Car> cars = street.getCars();
                     for (auto &car : cars)
                     {
-                        std::cout << "car id: " << car.id << " in " << street.getDirectionName() << " street did not get permitted to pass" << std::endl;
+                        std::cout << "car id: " << car.id << " in " << street.getDirectionName() << " street did not get permit to pass" << std::endl;
                         street.setCarPermission(car.id, false);
                         street.setCarVelocity(car.id, 0);
                     }
                 }
             }
-        case Pedestrian_state:
+        case PASSENGER:
             for (auto &street : streets)
             {
                 street.sortAllStreetCarsByDistance(street);
                 std::vector<Car> cars = street.getCars();
-                if (street.priority == PASSENGER)
+                std::vector<Pedestrian> pedestrians = street.getPedestrians();
+                if (street.state == PASSENGER)
                 {
                     for (auto &car : cars)
                     {
                         street.setCarPermission(car.id, false);
+
                         street.setCarVelocity(car.id, 0);
-                        std::cout << "car " << car.id << " in " << street.getDirectionName() << " street did not get permitted to pass" << std::endl;
+                        std::cout << "car " << car.id << " in " << street.getDirectionName() << " street did not get permit to pass" << std::endl;
+                    }
+                    for (auto &pedestrian : pedestrians)
+                    {
+                        street.setPedestrianPermission(pedestrian.id, true);
+                        std::cout << "pedestrian id: " << pedestrian.id << " in " << street.getDirectionName() << " street got permit to pass" << std::endl;
                     }
                 }
                 else
@@ -425,23 +438,23 @@ public:
                         {
                             street.setCarPermission(car.id, false);
                             street.setCarVelocity(car.id, 0);
-                            std::cout << "car " << car.id << " in " << street.getDirectionName() << " street did not get permitted to pass" << std::endl;
+                            std::cout << "car " << car.id << " in " << street.getDirectionName() << " street did not get permit to pass" << std::endl;
                         }
                         else
                         {
-                            std::cout << "car " << car.id << " in " << street.getDirectionName() << " street get permitted to pass" << std::endl;
+                            std::cout << "car " << car.id << " in " << street.getDirectionName() << " street get permit to pass" << std::endl;
                             street.setCarPermission(car.id, true);
                             street.setCarVelocity(car.id, speed_limit);
                         }
                     }
                 }
             }
-        case Traffic_state:
+        case HIGHTRAFFIC:
             for (auto &street : streets)
             {
                 street.sortAllStreetCarsByDistance(street);
                 std::vector<Car> cars = street.getCars();
-                if (street.priority == HIGHTRAFFIC)
+                if (street.state == HIGHTRAFFIC)
                 {
                     int max_index = 15;
                     int index = 0;
@@ -464,7 +477,7 @@ public:
                     }
                 }
             }
-        case Normal_state:
+        case NORMAL:
             for (auto &street : streets)
             {
                 street.sortAllStreetCarsByDistance(street);
@@ -476,9 +489,8 @@ public:
                 }
             }
         }
-        std::cout << "set car permission task: end" << std::endl;
+        std::cout << "set permission task: end" << std::endl;
     }
-
     void displayMovingSimulation(Intersection intersection)
     {
         std::vector<Street> streets = intersection.getStreets();
@@ -516,7 +528,7 @@ public:
 
             for (auto car : cars)
             {
-                if (car.isEmergency)
+                if (car.isPermitted)
                 {
                     std::cout << "Car: " << car.id << " in " << street.getDirectionName() << " street passed the intersection." << std::endl;
                     street.removeCar(car);
@@ -531,17 +543,17 @@ int main()
     // Create an Intersection instance with extream weather = true and day time = true.
     Intersection intersection(1, true, false);
 
-    Street street1(0, SOUTH, Priority::NORMAL);
+    Street street1(0, SOUTH, State::NORMAL);
     Car car1(0, 35, false, {20, 30}, SOUTH, EAST, 50, false, false);
     Pedestrian pedestrian1(1, SOUTH);
 
-    Street street2(1, WEST, Priority::NORMAL);
+    Street street2(1, WEST, State::NORMAL);
     Car car2(1, 72, true, {60, 10}, WEST, EAST, 10, false, false);
 
-    Street street3(2, NORTH, Priority::NORMAL);
+    Street street3(2, NORTH, State::NORMAL);
     Car car3(2, 43, false, {205, 300}, NORTH, SOUTH, 300, false, false);
 
-    Street street4(3, EAST, Priority::NORMAL);
+    Street street4(3, EAST, State::NORMAL);
     Car car4(3, 31, false, {100, 100}, EAST, NORTH, 100, false, false);
 
     intersection.addStreet(street1);
@@ -555,13 +567,13 @@ int main()
     intersection.addPedestrianToStreet(0, pedestrian1);
 
     Controller controller(1, intersection);
-    // while (true)
-    // {
-    controller.setStreetPriority(intersection);
-    controller.setCarPermission(intersection);
-    controller.displayMovingSimulation(intersection);
-    controller.upadteTrafficFlowPermission(intersection);
-    // }
+    while (true)
+    {
+        controller.setStreetPriority(intersection);
+        controller.setPassPermission(intersection);
+        controller.displayMovingSimulation(intersection);
+        controller.upadteTrafficFlowPermission(intersection);
+    }
 
     return 0;
 }
