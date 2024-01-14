@@ -1,0 +1,76 @@
+#include "intersection.h"
+#include <algorithm>
+
+Intersection::Intersection(int id, std::vector<Street> streets) : id(id), streets(streets) {}
+
+void Intersection::addStreet(const Street &street)
+{
+    streets.push_back(street);
+}
+void Intersection::addCarsToStreet(int streetId, const std::vector<Car> &cars)
+{
+    for (const auto &car : cars)
+    {
+        streets[streetId].addCar(car);
+    }
+}
+void Intersection::addPedestriansToStreet(int streetId, const std::vector<Pedestrian> &pedestrians)
+{
+    for (const auto &pedestrian : pedestrians)
+    {
+        streets[streetId].addPedestrian(pedestrian);
+    }
+}
+bool Intersection::isThereEmergencyStreet(std::vector<Street> streets)
+{
+    for (auto &street : streets)
+    {
+        std::cout << "in the loop isThereEmergencyStreet " << street.getId() << std::endl;
+        if (street.getPriority() == EMERGENCY)
+        {
+            std::cout << "Intersection EMERGENCY: " << id << std::endl;
+            return true;
+        }
+    }
+    return false;
+}
+bool Intersection::isThereHighCongestionStreet(std::vector<Street> streets)
+{
+    for (auto &street : streets)
+    {
+        if (street.getPriority() == HIGHTRAFFIC)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+bool Intersection::isTherePedestrianStreet(std::vector<Street> streets)
+{
+    for (auto &street : streets)
+    {
+        if (street.getPriority() == PASSENGER)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+const std::vector<Street> Intersection::getStreets() const
+{
+    return streets;
+}
+void Intersection::sortAllIntersectionCarsByDistance(std::vector<Street> streets)
+{
+    std::vector<Car> cars;
+    for (auto &street : streets)
+    {
+        std::vector<Car> streetCars = street.getCars();
+        cars.insert(cars.end(), streetCars.begin(), streetCars.end());
+    }
+
+    // Now, sort the combined vector of cars
+    std::sort(cars.begin(), cars.end(), [](const Car &car1, const Car &car2)
+              { return car1.getDistance() < car2.getDistance(); });
+}
