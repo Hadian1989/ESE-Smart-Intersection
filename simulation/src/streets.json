@@ -1,0 +1,43 @@
+[
+    {
+        "id": 1,
+        "direction": "SOUTH",
+        "state": "NORMAL",
+        "cars": [
+            {"id": 101, "velocity": 30.0, "isEmergency": false, "position": [10, 20], "origin": "EAST", "destination": "WEST", "distance": 50.0, "isWaitingResponse": false, "isPermitted": false}
+        ],
+        "pedestrians": [
+            {"id": 201, "destination": "NORTH", "isWaitingResponse": false, "isPermitted": false}
+        ]
+    },
+    {
+        "id": 2,
+        "direction": "WEST",
+        "state": "EMERGENCY",
+        "cars": [
+            {"id": 102, "velocity": 40.0, "isEmergency": true, "position": [30, 40], "origin": "SOUTH", "destination": "NORTH", "distance": 60.0, "isWaitingResponse": false, "isPermitted": true}
+        ],
+        "pedestrians": []
+    },
+    {
+        "id": 3,
+        "direction": "NORTH",
+        "state": "HIGHTRAFFIC",
+        "cars": [
+            {"id": 103, "velocity": 25.0, "isEmergency": false, "position": [50, 60], "origin": "WEST", "destination": "EAST", "distance": 70.0, "isWaitingResponse": false, "isPermitted": false},
+            {"id": 104, "velocity": 35.0, "isEmergency": false, "position": [70, 80], "origin": "EAST", "destination": "WEST", "distance": 80.0, "isWaitingResponse": false, "isPermitted": true}
+        ],
+        "pedestrians": [
+            {"id": 202, "destination": "SOUTH", "isWaitingResponse": true, "isPermitted": false}
+        ]
+    },
+    {
+        "id": 4,
+        "direction": "EAST",
+        "state": "NORMAL",
+        "cars": [
+            {"id": 105, "velocity": 20.0, "isEmergency": false, "position": [90, 100], "origin": "NORTH", "destination": "SOUTH", "distance": 90.0, "isWaitingResponse": false, "isPermitted": true}
+        ],
+        "pedestrians": []
+    }
+]

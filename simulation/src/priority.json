@@ -1,0 +1,27 @@
+{
+    "streets": [
+        {
+            "cars": [
+                {
+                    "id": 0,
+                    "isEmergency": false
+                }
+            ],
+            "direction": 0,
+            "id": 0,
+            "priority": 0
+        },
+        {
+            "cars": [
+                null,
+                {
+                    "id": 1,
+                    "isEmergency": true
+                }
+            ],
+            "direction": 1,
+            "id": 1,
+            "priority": 0
+        }
+    ]
+}

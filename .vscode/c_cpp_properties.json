@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/simulation/src",
+                "${workspaceFolder}/external/json/include",
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

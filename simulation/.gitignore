@@ -1,3 +1,22 @@
 
 *.o
 **/*.o
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Build artifacts
+build/
+bin/
+lib/
+
+# Visual Studio Code
+.vscode/
+
+# Other build tools
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
