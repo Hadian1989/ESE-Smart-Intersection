@@ -1,6 +1,14 @@
 
+# C++ compiled object files
 *.o
-**/*.o
+*.obj
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+
 # CMake
 CMakeFiles/
 CMakeCache.txt

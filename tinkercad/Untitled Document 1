@@ -1,0 +1,112 @@
+// Arduino Code for Input Board 2 (Slave)
+const int inputPinEmergency = 5;  // Pin for the first input signal
+const int inputPinCar = 4;  // Pin for the second input signal
+const int inputPinPedestrian = 3;  // Pin for the second input signal
+
+const int analogPinCamera = A0; // Replace A0 with the analog pin you are using
+const int analogPinWeather = A1; // Replace A1 with the analog pin you are using
+
+
+const int outputPinEmergency = 13; // Pin for the Emergency Permission LED
+const int outputPinCar = 12; // Pin for the Normal Permission LED
+const int outputPinPedestrian = 11; // Pin for the Pedestrian LED
+
+unsigned long emergencyStartTime = 0;  // Variable to store the start time of emergency state
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(inputPinEmergency, INPUT);
+  pinMode(inputPinCar, INPUT);  
+  pinMode(inputPinPedestrian, INPUT);
+
+  pinMode(outputPinEmergency, OUTPUT);
+  pinMode(outputPinCar, OUTPUT);
+  pinMode(outputPinPedestrian, OUTPUT);
+}
+
+void checkPriority() {
+  // Debugging: Print input values
+  Serial.print("Emergency: ");
+  Serial.println(digitalRead(inputPinEmergency));
+  Serial.print("Pedestrian: ");
+  Serial.println(digitalRead(inputPinPedestrian));
+  Serial.print("CAr: ");
+  Serial.println(digitalRead(inputPinCar));
+
+  // Check if inputPinEmergency is high
+  if (digitalRead(inputPinEmergency)) {
+    // Debugging: Print execution flow
+    Serial.println("Emergency condition");
+
+    // Set the Emergency Permission LED high
+    digitalWrite(outputPinEmergency, HIGH);
+    digitalWrite(outputPinCar, LOW);
+    digitalWrite(outputPinPedestrian, LOW);
+  } else if (digitalRead(inputPinPedestrian)) {
+    // Debugging: Print execution flow
+    Serial.println("Pedestrian condition");
+
+    // Set the Pedestrian Permission LED high for a duration
+    digitalWrite(outputPinCar, LOW);
+    digitalWrite(outputPinPedestrian, HIGH);
+        digitalWrite(outputPinEmergency, LOW);
+
+  } else {
+    // Debugging: Print execution flow
+    Serial.println("Car condition");
+
+    digitalWrite(outputPinCar, HIGH);
+    digitalWrite(outputPinPedestrian, LOW);
+    digitalWrite(outputPinEmergency, LOW);
+
+  }
+}
+
+// Arduino Code for Input Board 2
+const int carSignal = 3;  // Connect to the car input pin on the main board
+const int permission = 2;
+const int passingDemo = 4;
+
+void setup() {
+  pinMode(carSignal, OUTPUT);
+  pinMode(passingDemo, OUTPUT);
+  pinMode(permission, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(carSignal, HIGH);
+  int permissionInput = digitalRead(permission);
+
+  // Send the state of the car button to the main board
+  Serial.print("Car: ");
+  Serial.println(permissionInput);
+
+  // Check if permission is HIGH, then set passingDemo to HIGH
+   // Check if permission is HIGH, then set passingDemo to HIGH
+  if (permissionInput == HIGH) {
+    digitalWrite(passingDemo, HIGH);
+    delay(500);  // Blinking interval: 500 milliseconds
+    digitalWrite(passingDemo, LOW);
+    delay(300);
+  } else {
+    digitalWrite(passingDemo, LOW);
+  }
+
+  delay(1000);  // Adjust delay based on your requirements
+}
+
+
+void loop() {
+  // Read input signals
+  unsigned long startTime = micros();  // Record the start time
+  
+  checkPriority();
+
+  unsigned long executionTime = micros() - startTime;  // Calculate the execution time
+  Serial.print("Execution Time (us): ");
+  Serial.println(executionTime);
+
+  delay(100); // Adjust delay based on your requirements
+}
+
