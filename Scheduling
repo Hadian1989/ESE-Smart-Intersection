@@ -1,1 +1,53 @@
+import time
+
+class Task:
+    def __init__(self, name, period, execution_time):
+        self.name = name
+        self.period = period
+        self.execution_time = execution_time
+        self.deadline = 0
+
+    def execute(self):
+        start_time = time.perf_counter()
+        print(f"Executing {self.name} task")
+        elapsed_time = time.perf_counter() - start_time
+        print(f"Execution time for {self.name}: {elapsed_time:.6f} seconds")
+        return elapsed_time
+
+def earliest_deadline_first(tasks):
+    return min(tasks, key=lambda x: x.deadline)
+
+def main():
+    # Define tasks (name, period, execution time)
+    emergency_task = Task("Emergency", 100, 0.020)
+    pedestrian_task = Task("Pedestrian", 200, 0.030)
+    congestion_task = Task("Congestion", 500, 0.050)
+
+    tasks = [emergency_task, pedestrian_task, congestion_task]
+
+    current_time = 0
+    total_execution_time = {task.name: 0 for task in tasks}
+
+    while current_time < 1000:  # Run for 1000 milliseconds as an example
+        # Calculate deadlines
+        for task in tasks:
+            task.deadline = current_time + task.period
+
+        # Select the task with the earliest deadline
+        selected_task = earliest_deadline_first(tasks)
+
+        # Check if the task can be executed without missing its deadline
+        if current_time + selected_task.execution_time <= selected_task.deadline:
+            execution_time = selected_task.execute()
+            total_execution_time[selected_task.name] += execution_time
+
+        # Wait for the next time unit
+        time.sleep(0.1)
+        current_time += 100
+
+    for task_name, task_execution_time in total_execution_time.items():
+        print(f"Total execution time for {task_name}: {task_execution_time:.6f} seconds")
+
+if __name__ == "__main__":
+    main()
 
